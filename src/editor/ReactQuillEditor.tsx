@@ -31,7 +31,7 @@ const ReactQuillEditor = ({ initialHtml = "<p></p>", onChange }: Props) => {
           // { indent: "+1" },
         ],
         [{ align: [] }],
-        ["link", "code-block", "clean"],
+        ["link", "image", "code-block", "clean"],
         [{ color: [] }, { background: [] }],
         // [{ script: 'sub' }, { script: 'super' }],
         ["table-better"],
