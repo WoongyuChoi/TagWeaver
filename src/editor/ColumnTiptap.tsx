@@ -1,8 +1,9 @@
-import { Box, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import HtmlViewer from "../component/HtmlViewer";
+import { Box, Stack, Typography } from "@mui/material";
 import TiptapEditor from "./TiptapEditor";
+import HtmlViewer from "../component/HtmlViewer";
 import useContentStore from "../store/contentStore";
+import useEditorSyncStore from "../store/editorSyncStore";
 
 const Section = (props: {
   title: string;
@@ -24,6 +25,7 @@ const Section = (props: {
           p: 2,
           bgcolor: "background.paper",
           overflow: "auto",
+          minHeight: 0,
         }}
       >
         {props.children}
@@ -33,18 +35,23 @@ const Section = (props: {
 };
 
 const ColumnTiptap = () => {
-  const [html, setHtml] = useState<string>("");
+  const [html, setHtml] = useState<string>("<p></p>");
   const randomHtml = useContentStore((s) => s.randomHtml);
+  const tiptapExternal = useEditorSyncStore((s) => s.tiptapHtml);
+
+  // useEffect(() => {
+  //   if (randomHtml) setHtml(randomHtml);
+  // }, [randomHtml]);
 
   useEffect(() => {
-    if (randomHtml) setHtml(randomHtml);
-  }, [randomHtml]);
-
+    if (tiptapExternal) setHtml(tiptapExternal);
+  }, [tiptapExternal]);
+  
   return (
     <Stack spacing={2}>
       <Section title="Editor (Tiptap)" height={280}>
         <Box sx={{ height: "100%", minHeight: 0 }}>
-          <TiptapEditor initialHtml="<p></p>" onChange={setHtml} externalHtml={randomHtml} />
+          <TiptapEditor initialHtml="<p></p>" externalHtml={tiptapExternal} onChange={setHtml} />
         </Box>
       </Section>
 

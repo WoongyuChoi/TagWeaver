@@ -3,6 +3,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import ReactQuillEditor from "./ReactQuillEditor";
 import HtmlViewer from "../component/HtmlViewer";
 import useContentStore from "../store/contentStore";
+import useEditorSyncStore from "../store/editorSyncStore";
 
 const Section = ({
   title,
@@ -35,12 +36,16 @@ const Section = ({
 );
 
 const ColumnReactQuill = () => {
-  const [html, setHtml] = useState<string>("");
+  const [html, setHtml] = useState("<p></p>");
   const randomHtml = useContentStore((s) => s.randomHtml);
 
   useEffect(() => {
     if (randomHtml) setHtml(randomHtml);
   }, [randomHtml]);
+  
+  useEffect(() => {
+    useEditorSyncStore.getState().setQuill(html);
+  }, [html]);
   
   return (
     <Stack spacing={2} sx={{ minHeight: 0 }}>

@@ -4,6 +4,7 @@ import ColumnTiptap from "../editor/ColumnTiptap";
 import ColumnLexical from "../editor/ColumnLexical";
 import ColumnReactQuill from "../editor/ColumnReactQuill";
 import useContentStore from "../store/contentStore";
+import useEditorSyncStore from "../store/editorSyncStore";
 
 const PlaceholderColumn = (props: { header: string }) => (
   <Stack spacing={2}>
@@ -25,9 +26,25 @@ const MainLayout = () => {
       <Box>
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
            <Typography variant="h5" fontWeight={700}>TagWeaver</Typography>
-            <Button variant="contained" onClick={() => useContentStore.getState().generate()}>
+
+          <Stack direction="row" spacing={1}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                useEditorSyncStore.getState().normalizeAndSyncFromQuill();
+              }}
+            >
+              Normalize &amp; Sync
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => useContentStore.getState().generate()}
+            >
               Generate Sample
             </Button>
+          </Stack>
         </Stack>
 
         <Divider sx={{ mb: 3 }} />

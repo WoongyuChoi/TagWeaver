@@ -3,6 +3,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import LexicalEditor from "./LexicalEditor";
 import HtmlViewer from "../component/HtmlViewer";
 import useContentStore from "../store/contentStore";
+import useEditorSyncStore from "../store/editorSyncStore";
 
 const Section = (props: {
   title: string;
@@ -34,18 +35,23 @@ const Section = (props: {
 };
 
 const ColumnLexical = () => {
-  const [html, setHtml] = useState<string>("");
+  const [html, setHtml] = useState<string>("<p></p>");
   const randomHtml = useContentStore((s) => s.randomHtml);
+  const lexicalExternal = useEditorSyncStore((s) => s.lexicalHtml);
+
+  // useEffect(() => {
+  //   if (randomHtml) setHtml(randomHtml);
+  // }, [randomHtml]);
 
   useEffect(() => {
-    if (randomHtml) setHtml(randomHtml);
-  }, [randomHtml]);
+    if (lexicalExternal) setHtml(lexicalExternal);
+  }, [lexicalExternal]);
   
   return (
     <Stack spacing={2}>
       <Section title="Editor (Lexical)" height={280}>
         <Box sx={{ height: "100%", minHeight: 0 }}>
-          <LexicalEditor initialHtml="<p></p>" onChange={setHtml} externalHtml={randomHtml} />
+          <LexicalEditor initialHtml="<p></p>" externalHtml={lexicalExternal} onChange={setHtml} />
         </Box>
       </Section>
 
