@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import ColumnTiptap from "../editor/ColumnTiptap";
 import ColumnLexical from "../editor/ColumnLexical";
+import ColumnToast from "../editor/ColumnToast";
 import ColumnReactQuill from "../editor/ColumnReactQuill";
 import useContentStore from "../store/contentStore";
 import useEditorSyncStore from "../store/editorSyncStore";
@@ -53,6 +54,9 @@ const MainLayout = () => {
           <ColumnTiptap />
           <ColumnLexical />
           <ColumnReactQuill />
+        </Box>
+        <Box sx={{ mt: 3 }}>
+          <ColumnToast />
         </Box>
       </Box>
     </Box>

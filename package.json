@@ -24,6 +24,8 @@
     "@tiptap/extension-underline": "^3.7.2",
     "@tiptap/react": "^3.7.2",
     "@tiptap/starter-kit": "^3.7.2",
+    "@toast-ui/editor": "^3.2.2",
+    "@toast-ui/react-editor": "^3.2.3",
     "@vercel/speed-insights": "^1.0.14",
     "dompurify": "^3.3.0",
     "lexical": "^0.37.0",
