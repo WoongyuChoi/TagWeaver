@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import ToastEditor from "./ToastEditor";
+import ToastViewer from "./ToastViewer";
 import HtmlViewer from "../component/HtmlViewer";
 import useEditorSyncStore from "../store/editorSyncStore";
 
@@ -35,7 +36,7 @@ const Section = (props: {
 
 const ColumnToast = () => {
   const [html, setHtml] = useState<string>("<p></p>");
-  const external = useEditorSyncStore((s) => s.lexicalHtml);
+  const toastExternal = useEditorSyncStore((s) => s.toastHtml);  
   const setLexical = useEditorSyncStore((s) => s.setLexical);
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const ColumnToast = () => {
         <Box sx={{ height: "100%", minHeight: 0 }}>
           <ToastEditor
             initialHtml="<p></p>"
-            externalHtml={external}
+            externalHtml={toastExternal}
             onChange={setHtml}
           />
         </Box>
@@ -67,8 +68,8 @@ const ColumnToast = () => {
         </Box>
       </Section>
 
-      <Section title="Sanitized Preview" height={220}>
-        <HtmlViewer html={html} />
+      <Section title="Preview (TOAST Viewer)" height={220}>
+        <ToastViewer html={html} />
       </Section>
     </Stack>
   );
