@@ -9,8 +9,21 @@ type Props = {
   onChange?: (html: string) => void;
 };
 
-const ToastEditor = ({ initialHtml = "", externalHtml, onChange }: Props) => {
+const ToastEditor = ({ initialHtml, externalHtml, onChange }: Props) => {
   const ref = useRef<Editor>(null);
+
+   useEffect(() => {
+    const inst = ref.current?.getInstance();
+    if (!inst) return;
+    if (typeof externalHtml !== "string") return;
+
+    const current = (inst.getHTML?.() as string) ?? "";
+    const norm = (s: string) => s.replace(/\s+/g, " ").trim();
+    if (norm(current) === norm(externalHtml)) return;
+
+    inst.setHTML(externalHtml);
+  }, [externalHtml]);
+  
   const toolbarItems = [
     ["heading", "bold", "italic", "strike"],
     ["hr"],
@@ -21,22 +34,11 @@ const ToastEditor = ({ initialHtml = "", externalHtml, onChange }: Props) => {
     ["scrollSync"],
   ];
 
-  useEffect(() => {
-    const inst = ref.current?.getInstance();
-    if (!inst || !initialHtml) return;
-    inst.setHTML(initialHtml);
-  }, [initialHtml]);
-
-  useEffect(() => {
-    const inst = ref.current?.getInstance();
-    if (!inst || typeof externalHtml !== "string") return;
-    inst.setHTML(externalHtml);
-  }, [externalHtml]);
-
   return (
     <Box sx={{ height: "100%", minHeight: 0 }}>
       <Editor
         ref={ref}
+        initialValue={initialHtml ?? ""}
         initialEditType="wysiwyg"
         usageStatistics={false}
         hideModeSwitch={true}
@@ -45,7 +47,7 @@ const ToastEditor = ({ initialHtml = "", externalHtml, onChange }: Props) => {
         toolbarItems={toolbarItems}
         onChange={() => {
           const inst = ref.current?.getInstance();
-          const html = inst?.getHTML() ?? "";
+          const html = (inst?.getHTML?.() as string) ?? "";
           onChange?.(html);
         }}
       />
