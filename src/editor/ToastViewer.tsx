@@ -8,26 +8,39 @@ type Props = {
 };
 
 const ToastViewer = ({ html }: Props) => {
-  const ref = useRef<Viewer>(null);
-
+  const viewerRef = useRef<Viewer>(null);
+  const rootBoxRef = useRef<HTMLDivElement | null>(null);
+  
   useEffect(() => {
-    const inst = ref.current?.getInstance();
+    const inst = viewerRef.current?.getInstance() as any;
     if (!inst) return;
 
-    const anyInst = inst as any;
-    if (typeof anyInst.setHTML === "function") {
-      anyInst.setHTML(html || "");
-      return;
-    }
+    if (typeof inst.setHTML === "function") inst.setHTML(html || "");
+    else if (typeof inst.setMarkdown === "function")
+      inst.setMarkdown(html || "");
 
-    if (typeof anyInst.setMarkdown === "function") {
-      anyInst.setMarkdown(html || "");
+    const root = rootBoxRef.current?.querySelector(
+      ".toastui-editor-contents"
+    ) as HTMLElement | null;
+    if (root) {
+      root.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((a) => {
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
+      });
     }
   }, [html]);
 
   return (
-    <Box sx={{ height: "100%", minHeight: 0, overflow: "auto" }}>
-      <Viewer ref={ref} initialValue={html || ""} usageStatistics={false} />
+    <Box
+      ref={rootBoxRef}
+      sx={{ height: "100%", minHeight: 0, overflow: "auto" }}
+    >
+      <Viewer
+        ref={viewerRef}
+        initialValue={html || ""}
+        usageStatistics={false}
+        linkAttributes={{ target: "_blank", rel: "noopener noreferrer" }}
+      />
     </Box>
   );
 };
