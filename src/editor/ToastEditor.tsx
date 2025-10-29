@@ -1,7 +1,10 @@
 import { Box } from "@mui/material";
+import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
+import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useEffect, useRef } from "react";
+import "tui-color-picker/dist/tui-color-picker.css";
 
 type Props = {
   initialHtml?: string;
@@ -12,7 +15,7 @@ type Props = {
 const ToastEditor = ({ initialHtml, externalHtml, onChange }: Props) => {
   const ref = useRef<Editor>(null);
 
-   useEffect(() => {
+  useEffect(() => {
     const inst = ref.current?.getInstance();
     if (!inst) return;
     if (typeof externalHtml !== "string") return;
@@ -23,7 +26,7 @@ const ToastEditor = ({ initialHtml, externalHtml, onChange }: Props) => {
 
     inst.setHTML(externalHtml);
   }, [externalHtml]);
-  
+
   const toolbarItems = [
     ["heading", "bold", "italic", "strike"],
     ["hr"],
@@ -50,6 +53,7 @@ const ToastEditor = ({ initialHtml, externalHtml, onChange }: Props) => {
           const html = (inst?.getHTML?.() as string) ?? "";
           onChange?.(html);
         }}
+        plugins={[colorSyntax]}
       />
     </Box>
   );
