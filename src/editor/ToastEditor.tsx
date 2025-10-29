@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor } from "@toast-ui/react-editor";
+import TuiEditor, { TuiEditorHandle } from "./TuiEditor";
 import { useEffect, useRef } from "react";
 import "tui-color-picker/dist/tui-color-picker.css";
 
@@ -13,10 +13,10 @@ type Props = {
 };
 
 const ToastEditor = ({ initialHtml, externalHtml, onChange }: Props) => {
-  const ref = useRef<Editor>(null);
+  const editorRef = useRef<TuiEditorHandle>(null);
 
   useEffect(() => {
-    const inst = ref.current?.getInstance();
+    const inst = editorRef.current?.getInstance();
     if (!inst) return;
     if (typeof externalHtml !== "string") return;
 
@@ -39,8 +39,8 @@ const ToastEditor = ({ initialHtml, externalHtml, onChange }: Props) => {
 
   return (
     <Box sx={{ height: "100%", minHeight: 0 }}>
-      <Editor
-        ref={ref}
+      <TuiEditor
+        ref={editorRef}
         initialValue={initialHtml ?? ""}
         initialEditType="wysiwyg"
         usageStatistics={false}
@@ -49,7 +49,7 @@ const ToastEditor = ({ initialHtml, externalHtml, onChange }: Props) => {
         height="100%"
         toolbarItems={toolbarItems}
         onChange={() => {
-          const inst = ref.current?.getInstance();
+          const inst = editorRef.current?.getInstance();
           const html = (inst?.getHTML?.() as string) ?? "";
           onChange?.(html);
         }}
